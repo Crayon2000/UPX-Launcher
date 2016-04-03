@@ -5,6 +5,9 @@ Release
 # Compiled resource file
 *.res
 
+# User-specific project options
+*.local
+
 # History file
 *.~*~
 
