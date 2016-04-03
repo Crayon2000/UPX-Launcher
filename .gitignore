@@ -1,0 +1,15 @@
+# Folder
+Debug
+Release
+
+# Compiled resource file
+*.res
+
+# History file
+*.~*~
+
+# Windows thumbnail cache
+Thumbs.db
+
+# Temporary file
+*.tmp
