@@ -3,7 +3,7 @@ object Form1: TForm1
   Top = 352
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
-  ClientHeight = 256
+  ClientHeight = 321
   ClientWidth = 417
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -22,27 +22,43 @@ object Form1: TForm1
     Caption = 'Select file:'
   end
   object GroupBox1: TGroupBox
-    Left = 16
+    Left = 8
     Top = 64
     Width = 385
-    Height = 81
+    Height = 145
     Caption = 'Compression methods'
     TabOrder = 0
-    object rbMode1: TRadioButton
+    object rbBestNRV2D: TRadioButton
       Left = 16
-      Top = 16
-      Width = 65
+      Top = 78
+      Width = 249
       Height = 25
-      Caption = 'Method 1'
+      Caption = 'Best with NRV2D'
       TabOrder = 0
     end
-    object rbMode2: TRadioButton
+    object rbBestNRV2B: TRadioButton
       Left = 16
-      Top = 48
-      Width = 73
+      Top = 109
+      Width = 249
       Height = 25
-      Caption = 'Method 2'
+      Caption = 'Best with NRV2B'
       TabOrder = 1
+    end
+    object rbUltraBrute: TRadioButton
+      Left = 16
+      Top = 16
+      Width = 249
+      Height = 25
+      Caption = 'Ultra Brute'
+      TabOrder = 2
+    end
+    object rbBrute: TRadioButton
+      Left = 16
+      Top = 47
+      Width = 249
+      Height = 25
+      Caption = 'Brute'
+      TabOrder = 3
     end
   end
   object txtSelected: TEdit
@@ -63,7 +79,7 @@ object Form1: TForm1
   end
   object cmdCompress: TButton
     Left = 16
-    Top = 216
+    Top = 278
     Width = 385
     Height = 33
     Caption = 'Compress'
@@ -72,7 +88,7 @@ object Form1: TForm1
   end
   object GroupBox2: TGroupBox
     Left = 16
-    Top = 152
+    Top = 215
     Width = 385
     Height = 57
     Caption = 'Option'

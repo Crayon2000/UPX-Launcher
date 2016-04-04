@@ -12,8 +12,8 @@ class TForm1 : public TForm
 {
 __published:    // IDE-managed Components
     TGroupBox *GroupBox1;
-    TRadioButton *rbMode1;
-    TRadioButton *rbMode2;
+    TRadioButton *rbBestNRV2D;
+    TRadioButton *rbBestNRV2B;
     TLabel *Label1;
     TEdit *txtSelected;
     TOpenDialog *Dialog;
@@ -21,6 +21,8 @@ __published:    // IDE-managed Components
     TButton *cmdCompress;
     TGroupBox *GroupBox2;
     TCheckBox *chkBackup;
+    TRadioButton *rbUltraBrute;
+    TRadioButton *rbBrute;
     void __fastcall cmdBrowseClick(TObject *Sender);
     void __fastcall cmdCompressClick(TObject *Sender);
 private:    // User declarations

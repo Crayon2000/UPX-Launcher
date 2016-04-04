@@ -20,7 +20,7 @@ __fastcall TForm1::TForm1(TComponent* Owner)
     Dialog->Options.Clear();
     Dialog->Options << TOpenOption::ofFileMustExist << TOpenOption::ofNoChangeDir << TOpenOption::ofHideReadOnly;
 
-    rbMode1->Checked = true;
+    rbBestNRV2D->Checked = true;
 }
 //---------------------------------------------------------------------------
 
@@ -62,13 +62,21 @@ void __fastcall TForm1::cmdCompressClick(TObject *Sender)
 
     // Launch UPX.exe
     String cmdLine = "\"" + txtSelected->Text + "\"";
-    if(rbMode1->Checked == true)
+    if(rbBestNRV2D->Checked == true)
     {
-        cmdLine = "--best --crp-ms=999999 --nrv2d " + cmdLine;
+        cmdLine = "--best --nrv2d --crp-ms=999999 " + cmdLine;
     }
-    else
+    else if(rbBestNRV2B->Checked == true)
     {
-        cmdLine = "--best --crp-ms=999999 --nrv2b " + cmdLine;
+        cmdLine = "--best --nrv2b --crp-ms=999999 " + cmdLine;
+    }
+    else if(rbBrute->Checked == true)
+    {
+        cmdLine = "--brute --crp-ms=999999 " + cmdLine;
+    }
+    else if(rbUltraBrute->Checked == true)
+    {
+        cmdLine = "--ultra-brute --crp-ms=999999 " + cmdLine;
     }
     if(FileExists(txtSelected->Text) == false)
     {
@@ -206,8 +214,10 @@ void __fastcall TForm1::EnableControls(bool AEnabled)
     Label1->Enabled = AEnabled;
     txtSelected->Enabled = AEnabled;
     cmdBrowse->Enabled = AEnabled;
-    rbMode1->Enabled = AEnabled;
-    rbMode2->Enabled = AEnabled;
+    rbBestNRV2D->Enabled = AEnabled;
+    rbBestNRV2B->Enabled = AEnabled;
+    rbBrute->Enabled = AEnabled;
+    rbUltraBrute->Enabled = AEnabled;
     chkBackup->Enabled = AEnabled;
 }
 //---------------------------------------------------------------------------
