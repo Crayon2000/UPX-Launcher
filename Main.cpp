@@ -36,8 +36,8 @@ void __fastcall TForm1::cmdBrowseClick(TObject *Sender)
 void __fastcall TForm1::cmdCompressClick(TObject *Sender)
 {
     HANDLE hInstance = NULL;
-    int oldSize;
-    int newSize;
+    int OldSize;
+    int NewSize;
 
     if(txtSelected->Text.IsEmpty() == true)
     {
@@ -46,7 +46,7 @@ void __fastcall TForm1::cmdCompressClick(TObject *Sender)
 
     cmdCompress->Enabled = false;
 
-    FileSize(txtSelected->Text, &oldSize);
+    FileSize(txtSelected->Text, OldSize);
 
     // On fait le backup
     if(chkBackup->Checked == true)
@@ -85,7 +85,7 @@ void __fastcall TForm1::cmdCompressClick(TObject *Sender)
         hInstance = ExecuteProgramEx("upx.exe " + cmdLine);
         Wait(hInstance);
 
-        if(!hInstance)
+        if(hInstance == NULL)
         {
             MessageBeep(0);
             MessageDlg("Error opening upx.exe."
@@ -95,12 +95,12 @@ void __fastcall TForm1::cmdCompressClick(TObject *Sender)
         }
     }
 
-    FileSize(txtSelected->Text, &newSize);
-    float ratio = (float)(100.0f * newSize / oldSize);
+    FileSize(txtSelected->Text, NewSize);
+    float ratio = (float)(100.0f * NewSize / OldSize);
 
-    MessageDlg("Original file size: " + System::Sysutils::IntToStr(oldSize) + " bytes"
+    MessageDlg("Original file size: " + System::Sysutils::IntToStr(OldSize) + " bytes"
               "\r\n" \
-              "Compress file size: " + System::Sysutils::IntToStr(newSize) + " bytes"
+              "Compress file size: " + System::Sysutils::IntToStr(NewSize) + " bytes"
               "\r\n" \
               "Ratio: " + FormatFloat("0.00", ratio) + "%",
               TMsgDlgType::mtInformation, TMsgDlgButtons() << TMsgDlgBtn::mbOK, 0);
@@ -142,8 +142,8 @@ HANDLE __fastcall TForm1::ExecuteProgramEx(const String ACmd)
                FILE_ATTRIBUTE_NORMAL,
                NULL);
     */
-    bool bres = CreateProcess(NULL, ACmd.c_str(), NULL, NULL, true, 0, NULL, NULL, &si, &pi);
-    if(bres == true)
+    bool ProcResult = CreateProcess(NULL, ACmd.c_str(), NULL, NULL, true, 0, NULL, NULL, &si, &pi);
+    if(ProcResult == true)
     {
         return pi.hProcess;
     }
@@ -170,8 +170,8 @@ void __fastcall TForm1::Wait(HANDLE AHandle)
     Screen->Cursor = crHourGlass;
 
     Enabled = false;
-    bool done = false;
-    while(done == false)
+    bool Done = false;
+    while(Done == false)
     {
         GetExitCodeProcess(
             AHandle,        // handle to the process
@@ -184,7 +184,7 @@ void __fastcall TForm1::Wait(HANDLE AHandle)
         }
         else
         {
-            done = true;
+            Done = true;
         }
 
         /*
@@ -195,7 +195,7 @@ void __fastcall TForm1::Wait(HANDLE AHandle)
         }
         else
         {
-            done=true;
+            Done=true;
         }
         */
     }
@@ -206,18 +206,22 @@ void __fastcall TForm1::Wait(HANDLE AHandle)
 }
 //---------------------------------------------------------------------------
 
-bool __fastcall TForm1::FileSize(const String AName, int * ASize)
+bool __fastcall TForm1::FileSize(const String AName, int& ASize)
 {
-    int FileHandle = FileOpen(AName, fmOpenRead);
+    bool Result = false;
+
+    NativeUInt FileHandle = Sysutils::FileOpen(AName, fmOpenRead);
     if(FileHandle > 0)
     {
-        int FileSize = FileSeek(FileHandle, 0, 2);
+        ASize = Sysutils::FileSeek(FileHandle, 0, 2);
+        if(ASize > 0)
+        {
+            Result = true;
+        }
         FileClose(FileHandle);
-        *ASize = FileSize;
-        return true;
     }
 
-    return false;
+    return Result;
 }
 //---------------------------------------------------------------------------
 

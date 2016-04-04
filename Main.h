@@ -10,7 +10,7 @@
 //---------------------------------------------------------------------------
 class TForm1 : public TForm
 {
-__published:	// IDE-managed Components
+__published:    // IDE-managed Components
     TGroupBox *GroupBox1;
     TRadioButton *rbMode1;
     TRadioButton *rbMode2;
@@ -23,11 +23,11 @@ __published:	// IDE-managed Components
     TCheckBox *chkBackup;
     void __fastcall cmdBrowseClick(TObject *Sender);
     void __fastcall cmdCompressClick(TObject *Sender);
-private:	// User declarations
+private:    // User declarations
     HANDLE __fastcall ExecuteProgramEx(const String ACmd);
     void __fastcall Wait(HANDLE AHandle);
-    bool __fastcall FileSize(const String AName, int * ASize);
-public:		// User declarations
+    bool __fastcall FileSize(const String AName, int& ASize);
+public:     // User declarations
     __fastcall TForm1(TComponent* Owner);
     __fastcall virtual ~TForm1() {};
 };
