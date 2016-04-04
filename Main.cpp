@@ -3,6 +3,7 @@
 #pragma hdrstop
 
 #include "Main.h"
+#include <System.IOUtils.hpp>
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
@@ -17,7 +18,7 @@ __fastcall TForm1::TForm1(TComponent* Owner)
     Dialog->Title = "Choose file to compress";
     Dialog->Filter = "Execute file (*.exe)|*.exe";
     Dialog->Options.Clear();
-    Dialog->Options << ofOldStyleDialog << ofNoLongNames << ofNoChangeDir << ofHideReadOnly;
+    Dialog->Options << TOpenOption::ofFileMustExist << TOpenOption::ofNoChangeDir << TOpenOption::ofHideReadOnly;
 
     rbMode1->Checked = true;
 }
@@ -27,18 +28,7 @@ void __fastcall TForm1::cmdBrowseClick(TObject *Sender)
 {
     if(Dialog->Execute() == true)
     {
-        if(FileExists(Dialog->FileName) == true)
-        {
-            txtSelected->Text = Dialog->FileName;
-        }
-        else
-        {
-            MessageBeep(0);
-            MessageDlg("File not found." \
-                    "\r\n" \
-                    "The requested file does not exist.",
-                    TMsgDlgType::mtWarning, TMsgDlgButtons() << TMsgDlgBtn::mbOK, 0);
-        }
+        txtSelected->Text = Dialog->FileName;
     }
 }
 //---------------------------------------------------------------------------
@@ -48,8 +38,6 @@ void __fastcall TForm1::cmdCompressClick(TObject *Sender)
     HANDLE hInstance = NULL;
     int oldSize;
     int newSize;
-    float ratio;
-    String cmdLine;
 
     if(txtSelected->Text.IsEmpty() == true)
     {
@@ -63,20 +51,25 @@ void __fastcall TForm1::cmdCompressClick(TObject *Sender)
     // On fait le backup
     if(chkBackup->Checked == true)
     {
-        if(CopyFile(txtSelected->Text.c_str(), String(txtSelected->Text + ".bak").c_str(), false) == false)
+        try
+        {
+            TFile::Copy(txtSelected->Text, txtSelected->Text + ".bak", true);
+        }
+        catch(...)
         {
             MessageBoxW(Handle, L"Backup failed", L"Error", MB_OK);
         }
     }
 
     // Launch UPX.exe
+    String cmdLine = "\"" + txtSelected->Text + "\"";
     if(rbMode1->Checked == true)
     {
-        cmdLine = String("--best --crp-ms=999999 --nrv2d " + txtSelected->Text);
+        cmdLine = "--best --crp-ms=999999 --nrv2d " + cmdLine;
     }
     else
     {
-        cmdLine = String("--best --crp-ms=999999 --nrv2b " + txtSelected->Text);
+        cmdLine = "--best --crp-ms=999999 --nrv2b " + cmdLine;
     }
     if(FileExists(txtSelected->Text) == false)
     {
@@ -103,7 +96,7 @@ void __fastcall TForm1::cmdCompressClick(TObject *Sender)
     }
 
     FileSize(txtSelected->Text, &newSize);
-    ratio = (float)(100.0f * newSize / oldSize);
+    float ratio = (float)(100.0f * newSize / oldSize);
 
     MessageDlg("Original file size: " + System::Sysutils::IntToStr(oldSize) + " bytes"
               "\r\n" \
@@ -215,12 +208,11 @@ void __fastcall TForm1::Wait(HANDLE AHandle)
 
 bool __fastcall TForm1::FileSize(const String AName, int * ASize)
 {
-    int FileSize;
-    int FHandle = FileOpen(AName, fmOpenRead);
-    if(FHandle != -1)
+    int FileHandle = FileOpen(AName, fmOpenRead);
+    if(FileHandle > 0)
     {
-        FileSize = FileSeek(FHandle, 0, 2);
-        FileClose(FHandle);
+        int FileSize = FileSeek(FileHandle, 0, 2);
+        FileClose(FileHandle);
         *ASize = FileSize;
         return true;
     }
