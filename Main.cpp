@@ -35,7 +35,6 @@ void __fastcall TForm1::cmdBrowseClick(TObject *Sender)
 
 void __fastcall TForm1::cmdCompressClick(TObject *Sender)
 {
-    HANDLE hInstance = NULL;
     int OldSize;
     int NewSize;
 
@@ -81,11 +80,10 @@ void __fastcall TForm1::cmdCompressClick(TObject *Sender)
     }
     else
     {
-        //hInstance = ShellExecute(NULL, "open", "upx.exe", cmdLine.c_str(), NULL, SW_HIDE);
-        hInstance = ExecuteProgramEx("upx.exe " + cmdLine);
-        Wait(hInstance);
+        HANDLE LHandle = ExecuteProgramEx("upx.exe " + cmdLine);
+        Wait(LHandle);
 
-        if(hInstance == NULL)
+        if(LHandle == NULL)
         {
             MessageBeep(0);
             MessageDlg("Error opening upx.exe."
@@ -106,7 +104,6 @@ void __fastcall TForm1::cmdCompressClick(TObject *Sender)
               TMsgDlgType::mtInformation, TMsgDlgButtons() << TMsgDlgBtn::mbOK, 0);
 
     cmdCompress->Enabled = true;
-    //CloseHandle(hInstance);
 }
 //---------------------------------------------------------------------------
 
@@ -189,13 +186,13 @@ void __fastcall TForm1::Wait(HANDLE AHandle)
 
         /*
         DWORD res = WaitForSingleObject(AHandle,50);
-        if (res==WAIT_TIMEOUT)
+        if(res==WAIT_TIMEOUT)
         {
             Application->ProcessMessages();
         }
         else
         {
-            Done=true;
+            Done = true;
         }
         */
     }
