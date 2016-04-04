@@ -38,12 +38,12 @@ void __fastcall TForm1::cmdCompressClick(TObject *Sender)
     int OldSize;
     int NewSize;
 
+    EnableControls(false);
+
     if(txtSelected->Text.IsEmpty() == true)
     {
         return;
     }
-
-    cmdCompress->Enabled = false;
 
     FileSize(txtSelected->Text, OldSize);
 
@@ -103,7 +103,7 @@ void __fastcall TForm1::cmdCompressClick(TObject *Sender)
               "Ratio: " + FormatFloat("0.00", ratio) + "%",
               TMsgDlgType::mtInformation, TMsgDlgButtons() << TMsgDlgBtn::mbOK, 0);
 
-    cmdCompress->Enabled = true;
+    EnableControls(true);
 }
 //---------------------------------------------------------------------------
 
@@ -160,13 +160,11 @@ void __fastcall TForm1::Wait(HANDLE AHandle)
     {
         return;
     }
-    // In this wait procedure, we set the cursor to the hourglass
-    // and disable the form. Then we repeat a loop:
-    // Then restore the form and cursor.
+    // In this wait procedure, we set the cursor to the hourglass.
+    // Then we repeat a loop: Then restore the cursor.
     TCursor Oldcursor = Screen->Cursor;
     Screen->Cursor = crHourGlass;
 
-    Enabled = false;
     bool Done = false;
     while(Done == false)
     {
@@ -199,7 +197,18 @@ void __fastcall TForm1::Wait(HANDLE AHandle)
     CloseHandle(AHandle);
 
     Screen->Cursor = Oldcursor;
-    Enabled = true;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::EnableControls(bool AEnabled)
+{
+    cmdCompress->Enabled = AEnabled;
+    Label1->Enabled = AEnabled;
+    txtSelected->Enabled = AEnabled;
+    cmdBrowse->Enabled = AEnabled;
+    rbMode1->Enabled = AEnabled;
+    rbMode2->Enabled = AEnabled;
+    chkBackup->Enabled = AEnabled;
 }
 //---------------------------------------------------------------------------
 

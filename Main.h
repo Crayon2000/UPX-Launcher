@@ -27,6 +27,7 @@ private:    // User declarations
     HANDLE __fastcall ExecuteProgramEx(const String ACmd);
     void __fastcall Wait(HANDLE AHandle);
     bool __fastcall FileSize(const String AName, int& ASize);
+    void __fastcall EnableControls(bool AEnabled);
 public:     // User declarations
     __fastcall TForm1(TComponent* Owner);
     __fastcall virtual ~TForm1() {};
