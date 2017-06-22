@@ -5,6 +5,9 @@
 # Compiled resource file
 *.res
 
+# Machine generated header from .pas file
+*.hpp
+
 # User-specific project options
 *.local
 
@@ -12,7 +15,7 @@
 *.dsk
 
 # History file
-*.~*~
+*.~*
 
 # Castalia statistics file
 *.stat
@@ -25,3 +28,4 @@ Thumbs.db
 
 # Temporary file
 *.tmp
+*.$$$

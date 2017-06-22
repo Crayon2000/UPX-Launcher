@@ -132,7 +132,7 @@ HANDLE __fastcall TForm1::ExecuteProgramEx(const String ACmd)
     si.hStdInput = GetStdHandle(STD_INPUT_HANDLE);
     si.hStdError = GetStdHandle(STD_ERROR_HANDLE);
 
-    sa.nLength = sizeof sa;
+    sa.nLength = sizeof(sa);
     sa.lpSecurityDescriptor = NULL;
     sa.bInheritHandle = true;
 
