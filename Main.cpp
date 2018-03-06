@@ -126,10 +126,11 @@ HANDLE __fastcall TForm1::ExecuteProgramEx(const String ACmd)
     si.lpDesktop = NULL;
     si.lpTitle = L"UPX";
     si.dwFlags = STARTF_USESTDHANDLES | STARTF_USESHOWWINDOW;
+    si.wShowWindow = SW_HIDE;
     si.cbReserved2 = 0;
     si.lpReserved2 = NULL;
-    si.wShowWindow = SW_HIDE;
     si.hStdInput = GetStdHandle(STD_INPUT_HANDLE);
+    si.hStdOutput = NULL;
     si.hStdError = GetStdHandle(STD_ERROR_HANDLE);
 
     sa.nLength = sizeof(sa);
