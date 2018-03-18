@@ -124,7 +124,7 @@ HANDLE __fastcall TForm1::ExecuteProgramEx(const String ACmd)
     si.cb = sizeof(si);
     si.lpReserved = NULL;
     si.lpDesktop = NULL;
-    si.lpTitle = L"UPX";
+    si.lpTitle = const_cast<LPWSTR>(L"UPX");
     si.dwFlags = STARTF_USESTDHANDLES | STARTF_USESHOWWINDOW;
     si.wShowWindow = SW_HIDE;
     si.cbReserved2 = 0;
