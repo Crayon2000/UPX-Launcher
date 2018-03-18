@@ -35,24 +35,36 @@ void __fastcall TForm1::cmdBrowseClick(TObject *Sender)
 
 void __fastcall TForm1::cmdCompressClick(TObject *Sender)
 {
+    try
+    {
+        EnableControls(false);
+        CompressFile(txtSelected->Text, chkBackup->Checked);
+    }
+    __finally
+    {
+        EnableControls(true);
+    }
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::CompressFile(const String APath, bool ABackup)
+{
     int OldSize;
     int NewSize;
 
-    EnableControls(false);
-
-    if(txtSelected->Text.IsEmpty() == true)
+    if(APath.IsEmpty() == true)
     {
         return;
     }
 
-    FileSize(txtSelected->Text, OldSize);
+    FileSize(APath, OldSize);
 
     // On fait le backup
-    if(chkBackup->Checked == true)
+    if(ABackup == true)
     {
         try
         {
-            TFile::Copy(txtSelected->Text, txtSelected->Text + ".bak", true);
+            TFile::Copy(APath, APath + ".bak", true);
         }
         catch(...)
         {
@@ -61,7 +73,7 @@ void __fastcall TForm1::cmdCompressClick(TObject *Sender)
     }
 
     // Launch UPX.exe
-    String cmdLine = "\"" + txtSelected->Text + "\"";
+    String cmdLine = "\"" + APath + "\"";
     if(rbBestNRV2D->Checked == true)
     {
         cmdLine = "--best --nrv2d --crp-ms=999999 " + cmdLine;
@@ -78,7 +90,7 @@ void __fastcall TForm1::cmdCompressClick(TObject *Sender)
     {
         cmdLine = "--ultra-brute --crp-ms=999999 " + cmdLine;
     }
-    if(FileExists(txtSelected->Text) == false)
+    if(FileExists(APath) == false)
     {
         MessageBeep(0);
         MessageDlg("The program must be in the same folder as upx.exe."
@@ -101,7 +113,7 @@ void __fastcall TForm1::cmdCompressClick(TObject *Sender)
         }
     }
 
-    FileSize(txtSelected->Text, NewSize);
+    FileSize(APath, NewSize);
     float ratio = (float)(100.0f * NewSize / OldSize);
 
     MessageDlg("Original file size: " + System::Sysutils::IntToStr(OldSize) + " bytes"
@@ -110,8 +122,6 @@ void __fastcall TForm1::cmdCompressClick(TObject *Sender)
               "\r\n" \
               "Ratio: " + FormatFloat("0.00", ratio) + "%",
               TMsgDlgType::mtInformation, TMsgDlgButtons() << TMsgDlgBtn::mbOK, 0);
-
-    EnableControls(true);
 }
 //---------------------------------------------------------------------------
 

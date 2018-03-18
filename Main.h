@@ -26,6 +26,7 @@ __published:    // IDE-managed Components
     void __fastcall cmdBrowseClick(TObject *Sender);
     void __fastcall cmdCompressClick(TObject *Sender);
 private:    // User declarations
+    void __fastcall CompressFile(const String APath, bool ABackup);
     HANDLE __fastcall ExecuteProgramEx(const String ACmd);
     void __fastcall Wait(HANDLE AHandle);
     bool __fastcall FileSize(const String AName, int& ASize);
