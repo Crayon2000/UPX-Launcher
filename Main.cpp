@@ -47,6 +47,29 @@ void __fastcall TForm1::cmdCompressClick(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
+String __fastcall TForm1::GetCmdLine(const String APath)
+{
+    String Result;
+    if(rbBestNRV2D->Checked == true)
+    {
+        Result = "--best --nrv2d --crp-ms=999999";
+    }
+    else if(rbBestNRV2B->Checked == true)
+    {
+        Result = "--best --nrv2b --crp-ms=999999";
+    }
+    else if(rbBrute->Checked == true)
+    {
+        Result = "--brute --crp-ms=999999";
+    }
+    else if(rbUltraBrute->Checked == true)
+    {
+        Result = "--ultra-brute --crp-ms=999999";
+    }
+    return "upx.exe " + Result + " \"" + APath + "\"";
+}
+//---------------------------------------------------------------------------
+
 void __fastcall TForm1::CompressFile(const String APath, bool ABackup)
 {
     int OldSize;
@@ -73,23 +96,6 @@ void __fastcall TForm1::CompressFile(const String APath, bool ABackup)
     }
 
     // Launch UPX.exe
-    String cmdLine = "\"" + APath + "\"";
-    if(rbBestNRV2D->Checked == true)
-    {
-        cmdLine = "--best --nrv2d --crp-ms=999999 " + cmdLine;
-    }
-    else if(rbBestNRV2B->Checked == true)
-    {
-        cmdLine = "--best --nrv2b --crp-ms=999999 " + cmdLine;
-    }
-    else if(rbBrute->Checked == true)
-    {
-        cmdLine = "--brute --crp-ms=999999 " + cmdLine;
-    }
-    else if(rbUltraBrute->Checked == true)
-    {
-        cmdLine = "--ultra-brute --crp-ms=999999 " + cmdLine;
-    }
     if(FileExists(APath) == false)
     {
         MessageBeep(0);
@@ -100,7 +106,8 @@ void __fastcall TForm1::CompressFile(const String APath, bool ABackup)
     }
     else
     {
-        HANDLE LHandle = ExecuteProgramEx("upx.exe " + cmdLine);
+        const String CmdLine = GetCmdLine(APath);
+        HANDLE LHandle = ExecuteProgramEx(CmdLine);
         Wait(LHandle);
 
         if(LHandle == NULL)
