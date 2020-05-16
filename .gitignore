@@ -5,6 +5,9 @@
 # Compiled resource file
 *.res
 
+# Compiler-generated binaries (safe to delete)
+*.exe
+
 # Machine generated header from .pas file
 *.hpp
 
@@ -14,7 +17,9 @@
 # File used to save the project desktop
 *.dsk
 
-# History file
+# History and backup files
+__history/
+__recovery/
 *.~*
 
 # Castalia statistics file
