@@ -82,7 +82,7 @@ void __fastcall TForm1::CompressFile(const String APath, bool ABackup)
 
     FileSize(APath, OldSize);
 
-    // On fait le backup
+    // Create a backup
     if(ABackup == true)
     {
         try
@@ -121,7 +121,7 @@ void __fastcall TForm1::CompressFile(const String APath, bool ABackup)
     }
 
     FileSize(APath, NewSize);
-    float ratio = (float)(100.0f * NewSize / OldSize);
+    const float ratio = (float)(100.0f * NewSize / OldSize);
 
     MessageDlg("Original file size: " + System::Sysutils::IntToStr(OldSize) + " bytes"
               "\r\n" \
